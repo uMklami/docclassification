@@ -1,3 +1,3 @@
-# docclassification
+# Document Classification
 Document Classification is a deep idea in Text processing using text features (Integer data).
-It accepts the input file in csv format containing features of document. the last column of the whole document will represent the class label.
+It accepts the input file in csv format containing features of documents. the row represent a doucument while the column represents the features. the last column represent the class label.
