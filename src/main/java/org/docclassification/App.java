@@ -20,19 +20,19 @@ public class App {
 		fw.flush();
 		RDC rdc = new RDC();
 		/*
-		 * int[][] test = { { 1, 0, 0, 1, 0 }, { 1, 2, 0, 1, 4 }, { 1, 0, 0, 1,
-		 * 4 }, { 1, 0, 1, 0, 4 }, { 2, 5, 2, 0, 3 }, { 2, 0, 0, 1, 0 }, { 2, 5,
-		 * 0, 1, 0 }, { 2, 0, 0, 1, 0 }, { 3, 0, 0, 1, 0 }, { 3, 0, 0, 1, 0 }, {
-		 * 3, 0, 0, 1, 0 }, { 3, 0, 0, 1, 0 }, };
+		 * 
 		 */
-		int[][] multiarray = rdc.readcsvfile("subsetcombined.csv");
-
+		int[][] multiarray = rdc.readcsvfile("dataset20.csv");
+		
+		double[] averagelength = rdc.averageLength(multiarray);
 		int[] maxTerms = rdc.max_terms(multiarray);
-
+		
 		Set<Integer> classlabels = rdc.numberOfClasses(multiarray);
+		
 		for (int clas : classlabels) {
+			int count = 0;
 			fw.append("Results for Class "+ clas +"\n");
-			Map<String, int[][]> map = rdc.splitArray(multiarray, clas);
+			Map<String, int[][]> map = rdc.splitArray(multiarray, 5);
 
 			int[][] pos = map.get("positive");
 			int[][] neg = map.get("negative");
@@ -48,7 +48,6 @@ public class App {
 				int[] negative = negativeClass.get(i);
 
 				System.out.println("Maximum term : " + maxTerms[i]);
-//				fw.append("\n Maximum term : " + maxTerms[i]);
 				double[] auc_arr = new double[maxTerms[i]];
 				for (int j = 1; j <= maxTerms[i]; j++) {
 					double freq_positive = 0.0;
@@ -76,22 +75,15 @@ public class App {
 					if (min == 0.0) {
 						min = 0.1;
 					}
-					double result = d / (min * j);
+					double ntc = averagelength[count]*j;
+					double result = (d / (min)) * ntc;
+					//result = result* ntc;
 					auc_arr[j - 1] = Math.abs(result);
-//					System.out.println("Term : " + j);
-//					fw.append("\n Term : " + j);
-//					System.out.println("TPR : " + tpr + ", FPR : " + fpr + ", D : " + Math.abs(d) + ", Result : "
-//							+ Math.abs(result));
-					
-//					fw.append("\n TPR : " + tpr + ", FPR : " + fpr + ", D : " + Math.abs(d) + ", Result : "
-//							+ Math.abs(result));
 				}
-//				System.out.println("AUC : " + aucFinder(auc_arr));
-//				System.out.println("\n\n\n");
 				fw.append(aucFinder(auc_arr)+"\t");
-				
 			}
 			fw.append("\n\n\n");
+			count++;
 		}
 		fw.close();
 	}

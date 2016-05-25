@@ -100,8 +100,7 @@ public class RDC {
 		Map<String, int[][]> result = new HashMap<String, int[][]>();
 		int rows = multiarray.length;
 		int cols = multiarray[0].length;
-		//int pos = multiarray.length/3;
-		//int[] int_arr = 
+
 		
 		int[] intArray = ArrayUtils.toPrimitive(classes_list.toArray(new Integer[classes_list.size()]));
 		int freq = frequency(intArray).get(clas);
@@ -169,4 +168,48 @@ public class RDC {
 	    }
 		return maxTerms;
 	}
+	
+	public int addArray(int[] array){
+		int sum = 0;
+		for(int i =0; i <array.length; i++){
+			sum = array[i];
+		}
+		return sum;
+	}
+	
+	public double[] averageLength(int[][] docs){
+		int C = docs[0].length;
+		int R = docs.length;
+		
+		Set<Integer> classes = new HashSet<Integer>();
+
+	    for (int r = 0 ; r < R ; r++) {
+	    	classes.add(docs[r][C-1]);
+	    }
+		
+		double[] avergeLength = new double[classes.size()];
+		
+		Double all_sum = 0.0;
+		int count = 0;
+		
+		for(int cls : classes){
+			int sum = 0; 
+			for (int r = 0 ; r < R ; r++) {
+				if(cls == docs[r][C-1]){
+					for (int c = 0 ; c < C-2 ; c++) {
+						sum += docs[r][c];
+					}
+				}
+			}
+			all_sum += sum;
+			avergeLength[count] = sum;
+			count++;
+		}
+		all_sum = all_sum/R;
+		for(int i=0; i < avergeLength.length; i++){
+			avergeLength[i] = all_sum/avergeLength[i];
+		}
+		return avergeLength;
+	}
+	
 }
