@@ -16,7 +16,7 @@ import org.docclassification.models.Documents;
 public class App {
 	static FileWriter fw;
 	public static void main(String[] args) throws IOException {
-		fw = new FileWriter(new File("OutPut.txt"));
+		fw = new FileWriter(new File("OutPut1.txt"));
 		fw.flush();
 		RDC rdc = new RDC();
 		/*
@@ -25,14 +25,19 @@ public class App {
 		int[][] multiarray = rdc.readcsvfile("dataset20.csv");
 		
 		double[] averagelength = rdc.averageLength(multiarray);
+		
 		int[] maxTerms = rdc.max_terms(multiarray);
 		
-		Set<Integer> classlabels = rdc.numberOfClasses(multiarray);
+		for(int id : maxTerms){
+			System.out.print(id +" / ");
+		}
 		
+		Set<Integer> classlabels = rdc.numberOfClasses(multiarray);
+		int count = 0;
 		for (int clas : classlabels) {
-			int count = 0;
+			
 			fw.append("Results for Class "+ clas +"\n");
-			Map<String, int[][]> map = rdc.splitArray(multiarray, 5);
+			Map<String, int[][]> map = rdc.splitArray(multiarray, clas);
 
 			int[][] pos = map.get("positive");
 			int[][] neg = map.get("negative");
@@ -46,7 +51,7 @@ public class App {
 			for (int i = 0; i < maxTerms.length; i++) {
 				int[] positive = positiveClass.get(i);
 				int[] negative = negativeClass.get(i);
-
+				
 				System.out.println("Maximum term : " + maxTerms[i]);
 				double[] auc_arr = new double[maxTerms[i]];
 				for (int j = 1; j <= maxTerms[i]; j++) {
@@ -54,14 +59,17 @@ public class App {
 					double freq_negative = 0.0;
 					double tpr = 0.0;
 					double fpr = 0.0;
-
+//					System.out.println("RDCp : " +rdc.frequency(positive).get(j));
+//					System.out.println("RDCn : " +rdc.frequency(negative).get(j));
 					if (rdc.frequency(positive).get(j) != null) {
 						freq_positive = rdc.frequency(positive).get(j);
 						tpr = freq_positive / Documents.getNumOfPositiveDoc();
+//						System.out.println("TPR : " +tpr);
 					}
 					if (rdc.frequency(negative).get(j) != null) {
 						freq_negative = rdc.frequency(negative).get(j);
 						fpr = freq_negative / Documents.getNumOfNegativeDoc();
+//						System.out.println("FPR : " +fpr);
 					}
 					double d =0.0;
 					if(tpr == fpr){
@@ -75,11 +83,13 @@ public class App {
 					if (min == 0.0) {
 						min = 0.1;
 					}
-					double ntc = averagelength[count]*j;
-					double result = (d / (min)) * ntc;
-					//result = result* ntc;
+					double ntc = averagelength[count] * j;
+//					System.out.print(j + " / ");
+					double result = (d / min) * ntc;
+					System.out.println("\n Result : "+result );
 					auc_arr[j - 1] = Math.abs(result);
 				}
+				System.out.println();
 				fw.append(aucFinder(auc_arr)+"\t");
 			}
 			fw.append("\n\n\n");

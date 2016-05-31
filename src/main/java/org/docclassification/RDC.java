@@ -61,9 +61,9 @@ public class RDC {
 	  }
 
 	
-	public int max(int[] array){
+	public double max(double[] array){
 		
-		int max = array[0];
+		double max = array[0];
 		for (int i = 1; i < array.length; i++) {
 		    if (array[i] > max) {
 		      max = array[i];
@@ -103,6 +103,7 @@ public class RDC {
 
 		
 		int[] intArray = ArrayUtils.toPrimitive(classes_list.toArray(new Integer[classes_list.size()]));
+
 		int freq = frequency(intArray).get(clas);
 		
 		int[][] positive = new int[freq][cols];
@@ -111,13 +112,13 @@ public class RDC {
 		
 		for (int r = 0; r < rows; r++) {
 			if (multiarray[r][cols - 1] == clas) {
-				for (int c = 0; c < cols - 2; c++) {
+				for (int c = 0; c < cols - 1; c++) {
 						positive[pos_row][c] = multiarray[r][c];
 					}
 				pos_row++;
 				}
 			else{
-				for (int c = 0; c < cols - 2; c++) {
+				for (int c = 0; c < cols - 1; c++) {
 					negative[neg_row][c] = multiarray[r][c];
 				}
 				neg_row++;
@@ -156,8 +157,8 @@ public class RDC {
 		
 		int C = docs[0].length;
 		int R = docs.length;
-		int[] maxTerms = new int[C];
-		for (int c = 0 ; c < C ; c++) {
+		int[] maxTerms = new int[C-1];
+		for (int c = 0 ; c < C-1 ; c++) {
 			int max = docs[0][c];
 	        for (int r = 1 ; r < R ; r++) {
 	        	if(max < docs[r][c]){
