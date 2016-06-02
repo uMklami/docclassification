@@ -181,7 +181,6 @@ public class RDC {
 	public double[] averageLength(int[][] docs){
 		int C = docs[0].length;
 		int R = docs.length;
-		
 		Set<Integer> classes = new HashSet<Integer>();
 
 	    for (int r = 0 ; r < R ; r++) {
@@ -197,7 +196,7 @@ public class RDC {
 			int sum = 0; 
 			for (int r = 0 ; r < R ; r++) {
 				if(cls == docs[r][C-1]){
-					for (int c = 0 ; c < C-2 ; c++) {
+					for (int c = 0 ; c < C-1 ; c++) {
 						sum += docs[r][c];
 					}
 				}
@@ -210,6 +209,7 @@ public class RDC {
 		for(int i=0; i < avergeLength.length; i++){
 			avergeLength[i] = all_sum/avergeLength[i];
 		}
+		
 		return avergeLength;
 	}
 	
